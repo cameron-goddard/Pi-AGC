@@ -16,3 +16,6 @@ class Display:
 
     def update_prog(self, val):
         pass
+
+    def clear_all(self, excluding=None):
+        pass
