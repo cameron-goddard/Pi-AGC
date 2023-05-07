@@ -8,3 +8,6 @@ class Indicators:
 
     def __init__(self) -> None:
         pass
+
+    def clear_all(self) -> None:
+        pass

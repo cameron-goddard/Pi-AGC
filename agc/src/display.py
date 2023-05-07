@@ -7,7 +7,7 @@ class Display:
     """
 
     def __init__(self) -> None:
-        pygame.init()
+        #pygame.init()
         
         # Constants
         self.screen_size = (240, 400)
@@ -22,26 +22,25 @@ class Display:
         self.r3 = pygame.Rect(0, self.screen_size[1]-(self.rect_height*4), self.screen_size[0], self.rect_height)
         self.r4 = pygame.Rect(0, self.screen_size[1]-(self.rect_height*5), self.screen_size[0], self.rect_height)
         
-
+        # code_run = True
         
-        code_run = True
+        # while code_run:
+        #     for event in pygame.event.get():
+        #         print("in this other loop")
+        #         if event.type == pygame.QUIT:
+        #             code_run = False
+            
+        #     self.screen.fill("black")
+        #     pygame.draw.rect(self.screen, "black", self.r0)
+        #     pygame.draw.rect(self.screen, "black", self.r1)
+        #     pygame.draw.rect(self.screen, "black", self.r2)
+        #     pygame.draw.rect(self.screen, "black", self.r3)
+        #     pygame.draw.rect(self.screen, "black", self.r4)
+            
+            
+        #     pygame.display.flip()
         
-        while code_run:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    code_run = False
-            
-            self.screen.fill("black")
-            pygame.draw.rect(self.screen, "black", self.r0)
-            pygame.draw.rect(self.screen, "black", self.r1)
-            pygame.draw.rect(self.screen, "black", self.r2)
-            pygame.draw.rect(self.screen, "black", self.r3)
-            pygame.draw.rect(self.screen, "black", self.r4)
-            
-            
-            pygame.display.flip()
-        
-        pygame.quit()
+        # pygame.quit()
         
 
     def update_row(self, row: int, val: int) -> None:
@@ -59,4 +58,4 @@ class Display:
     def clear_all(self, excluding: str = None) -> None:
         pass
     
-d = Display()
+#d = Display()
