@@ -6,4 +6,4 @@ if __name__ == "__main__":
     pygame.init()
     
     dsky = DSKY()
-    dsky.run()
+    dsky.start()

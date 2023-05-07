@@ -9,12 +9,12 @@ from indicators import Indicators
 
 class DSKY:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.display = Display()
         self.indicators = Indicators()
         self.parser = Parser(self.display, self.indicators)
 
-    def run(self):
+    def start(self) -> None:
         while True:
             # try:
                 ret = None
@@ -30,3 +30,15 @@ class DSKY:
             # except Exception as e:
             #     print(e)
             #     break
+
+    def load(self) -> bool:
+        pass
+
+    # Defined below are default computer-specific behaviors (programs)
+
+    def lamp_test(self) -> None:
+        self.display.update_row(0, 88888)
+        self.display.update_row(1, 88888)
+        self.display.update_row(2, 88888)
+
+        # TODO: flash verb, noun, key-rel, opr-err. Think about input interrupt

@@ -56,8 +56,8 @@ class Parser:
 
             self.last_action = None
             print(self)
-            self.clear()
-            return self._parse()
+            self.__clear()
+            return self.__parse()
         else:
             if len(self.noun_seq) != 0 and len(self.verb_seq) == 0:
                 # TODO: flash opr err indicator
@@ -73,14 +73,14 @@ class Parser:
                 self.display.clear_all()
             
                 
-    def clear(self) -> None:
+    def __clear(self) -> None:
         self.verb_seq = []
         self.verb = False
 
         self.noun_seq = []
         self.noun = False
 
-    def _parse(self):
+    def __parse(self):
         pass
 
     def __str__(self) -> str:

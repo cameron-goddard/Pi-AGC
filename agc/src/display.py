@@ -2,8 +2,11 @@ import pygame
 import math
 
 class Display:
+    """
+    Handles updates to the right-hand side DSKY display.
+    """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pygame.init()
         
         # Constants
@@ -41,19 +44,19 @@ class Display:
         pygame.quit()
         
 
-    def update_row(self, val, index):
+    def update_row(self, row: int, val: int) -> None:
         pass
 
-    def update_verb(self, val):
+    def update_verb(self, val: int) -> None:
         pass
 
-    def update_noun(self, val):
+    def update_noun(self, val: int) -> None:
         pass
 
-    def update_prog(self, val):
+    def update_prog(self, val: int) -> None:
         pass
 
-    def clear_all(self, excluding=None):
+    def clear_all(self, excluding: str = None) -> None:
         pass
     
 d = Display()

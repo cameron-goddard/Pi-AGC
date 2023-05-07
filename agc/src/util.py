@@ -6,3 +6,7 @@ allowed_commands = {
     "v06n62e": "Show vel/alt/att once",
     "v16n62e": "Show vel/alt/att cont"
 }
+
+commands = [
+    ("v35e")
+]
