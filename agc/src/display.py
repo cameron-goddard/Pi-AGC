@@ -10,7 +10,7 @@ class Display:
     def __init__(self) -> None:
         
         # pygame.init()
-        # pygame.font.init()
+        pygame.font.init()
         
         # Constants
         self.screen_size = (240, 400)
@@ -28,9 +28,25 @@ class Display:
         self.rect_init()
         self.text_init()
         
+        self.screen.fill("black")
+        for item in self.rowList:
+            pygame.draw.rect(self.screen, "black", item[0])
+            self.screen.blit(item[1], item[0])
+        for item in self.boxList:
+            pygame.draw.rect(self.screen, "black", item[0])
+            self.screen.blit(item[1], item[0])
+        pygame.draw.rect(self.screen, "black", self.labelList[0][0])
+        self.screen.blit(self.labelList[0][1], self.labelList[0][0])
+        for i in range(len(self.labelList)):
+            if i != 0:
+                pygame.draw.rect(self.screen, (0, 255, 1), self.labelList[i][0])
+                self.screen.blit(self.labelList[i][1], self.labelList[i][0])
+        
+        pygame.display.flip()
+        
         
         # code_run = True
-        #
+        
         # while code_run:
         #     for event in pygame.event.get():
         #         print("in this other loop")
@@ -88,6 +104,7 @@ class Display:
         row_text = [r0_text, r1_text, r2_text]
         for i in range(len(self.rowList)):
             self.rowList[i].append(row_text[i])
+            self.screen.blit(self.rowList[i][1], self.rowList[i][0])
         
         # prog, verb, and noun values
         prog_text = self.font_dig.render('', False, (0, 255, 1))
@@ -97,6 +114,7 @@ class Display:
         box_text = [prog_text, verb_text, noun_text]
         for i in range(len(self.boxList)):
             self.boxList[i].append(box_text[i])
+            self.screen.blit(self.boxList[i][1], self.boxList[i][0])
         
         # text that never changes
         comp_label_text = self.font_cor.render('COMP ACTY', False, (73, 73, 73))
@@ -107,6 +125,7 @@ class Display:
         label_text = [comp_label_text, prog_label_text, verb_label_text, noun_label_text]
         for i in range(len(self.labelList)):
             self.labelList[i].append(label_text[i])
+            self.screen.blit(self.labelList[i][1], self.labelList[i][0])
     
     def update_row(self, row: int, val: int) -> None:
         self.rowList[row][1] = self.font_dig.render(str(val), False, (0, 255, 1))
@@ -125,11 +144,11 @@ class Display:
         self.screen.blit(self.boxList[0][1], self.boxList[0][0])
 
     def clear_all(self, excluding: str = None) -> None:
-        self.update_row(0, 0)
-        self.update_row(1, 0)
-        self.update_row(2, 0)
-        self.update_verb(0)
-        self.update_noun(0)
-        self.update_prog(0)
+        self.update_row(0, "00000")
+        self.update_row(1, "00000")
+        self.update_row(2, "00000")
+        self.update_verb("00")
+        self.update_noun("00")
+        self.update_prog("")
     
 #d = Display()
