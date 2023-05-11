@@ -10,7 +10,7 @@ class Display:
     def __init__(self) -> None:
         
         # pygame.init()
-        pygame.font.init()
+        #pygame.font.init()
         
         # Constants
         self.screen_size = (240, 400)
@@ -29,18 +29,7 @@ class Display:
         self.text_init()
         
         self.screen.fill((0,0,0))
-        for item in self.rowList:
-            pygame.draw.rect(self.screen, (0,0,0), item[0])
-            self.screen.blit(item[1], item[0])
-        for item in self.boxList:
-            pygame.draw.rect(self.screen, (0,0,0), item[0])
-            self.screen.blit(item[1], item[0])
-        pygame.draw.rect(self.screen, (0,0,0), self.labelList[0][0])
-        self.screen.blit(self.labelList[0][1], self.labelList[0][0])
-        for i in range(len(self.labelList)):
-            if i != 0:
-                pygame.draw.rect(self.screen, (0, 255, 1), self.labelList[i][0])
-                self.screen.blit(self.labelList[i][1], self.labelList[i][0])
+        self.blit_all()
         
         pygame.display.flip()
         
@@ -100,20 +89,34 @@ class Display:
             self.labelList[i].append(label_text[i])
             self.screen.blit(self.labelList[i][1], self.labelList[i][0])
     
+    def blit_all(self):
+        for item in self.rowList:
+            pygame.draw.rect(self.screen, (0,0,0), item[0])
+            self.screen.blit(item[1], item[0])
+        for item in self.boxList:
+            pygame.draw.rect(self.screen, (0,0,0), item[0])
+            self.screen.blit(item[1], item[0])
+        pygame.draw.rect(self.screen, (0,0,0), self.labelList[0][0])
+        self.screen.blit(self.labelList[0][1], self.labelList[0][0])
+        for i in range(len(self.labelList)):
+            if i != 0:
+                pygame.draw.rect(self.screen, (0, 255, 1), self.labelList[i][0])
+                self.screen.blit(self.labelList[i][1], self.labelList[i][0])
+    
     def update_row(self, row: str, val: str) -> None:
-        self.rowList[row][1] = self.font_dig.render(str(val), False, (0, 255, 1))
+        self.rowList[int(row)][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.rowList[row][1], self.rowList[row][0])
 
     def update_verb(self, val: str) -> None:
-        self.boxList[1][1] = self.font_dig.render(str(val), False, (0, 255, 1))
+        self.boxList[1][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.boxList[1][1], self.boxList[1][0])
 
     def update_noun(self, val: str) -> None:
-        self.boxList[2][1] = self.font_dig.render(str(val), False, (0, 255, 1))
+        self.boxList[2][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.boxList[2][1], self.boxList[2][0])
 
     def update_prog(self, val: str) -> None:
-        self.boxList[0][1] = self.font_dig.render(str(val), False, (0, 255, 1))
+        self.boxList[0][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.boxList[0][1], self.boxList[0][0])
 
     def clear_all(self, excluding: list[str] = None) -> None:
