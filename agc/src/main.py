@@ -13,6 +13,7 @@ def idle(dsky: DSKY) -> None:
 
 if __name__ == "__main__":
     pygame.init()
+    pygame.font.init()
 
     dsky = DSKY()
     progs = [test_prog]
