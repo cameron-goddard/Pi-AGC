@@ -32,13 +32,16 @@ class DSKY:
     def start(self) -> None:
         while True:
             # try:
-                ret = None
-                events = pygame.event.get()
-                for event in events:
+            ret = None
+            events = pygame.event.get()
+            for event in events:
 
-                    # Handle key events (debugging)
-                    if event.type == pygame.KEYDOWN:
-                        ret = self.parser.enter(pygame.key.name(event.key))
+                # Handle key events (debugging)
+                if event.type == pygame.KEYDOWN:
+                    ret = self.parser.enter(pygame.key.name(event.key))
+                
+            self.display.blit_all()
+            pygame.display.flip()
                         
                         
                         
