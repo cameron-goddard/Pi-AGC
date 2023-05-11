@@ -55,14 +55,15 @@ class Parser:
         elif key == "return":
             if self.last_action == None:
                 # TODO: flash opr err indicator
-                pass
+                return -1
 
             if self.last_action == "prog":
                 if len(self.noun_seq) != 2:
                     return -1
                 
-                return 
-                
+                self.last_action = None
+                self.__clear()
+                return int(''.join(str(n) for n in self.noun_seq))
 
             if self.last_action == "verb" and self.verb_seq[0] == 3 and self.verb_seq[1] == 7:
                 self.last_action = "prog"
@@ -75,18 +76,20 @@ class Parser:
         else:
             # Handle number key
             if len(self.noun_seq) != 0 and len(self.verb_seq) == 0:
-                # TODO: flash opr err indicator
+                self.display.clear_all(excluding=["prog"])
                 return -1
+            
+            num = int(key)
 
             if self.last_action == "verb":
                 if len(self.verb_seq) < 2:
-                    self.verb_seq.append(key)
+                    self.verb_seq.append(num)
             elif self.last_action == "noun":
                 if len(self.noun_seq) < 2:
-                    self.noun_seq.append(key)
+                    self.noun_seq.append(num)
             else:
-                self.display.clear_all()
-            
+                self.display.clear_all(excluding=["prog"])
+            return -2
                 
     def __clear(self) -> None:
         self.verb_seq = []
