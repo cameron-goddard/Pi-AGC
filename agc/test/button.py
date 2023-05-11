@@ -11,7 +11,7 @@ def GPIO17_callback(channel):
         print("17")
 
 
-GPIO.add_event_detect(17, GPIO.FALLING, callback=GPIO17_callback)
+GPIO.add_event_detect(17, GPIO.FALLING, callback=GPIO17_callback, bouncetime=400)
 
 
 while True:
