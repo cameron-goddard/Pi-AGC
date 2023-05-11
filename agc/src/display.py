@@ -28,14 +28,14 @@ class Display:
         self.rect_init()
         self.text_init()
         
-        self.screen.fill("black")
+        self.screen.fill((0,0,0))
         for item in self.rowList:
-            pygame.draw.rect(self.screen, "black", item[0])
+            pygame.draw.rect(self.screen, (0,0,0), item[0])
             self.screen.blit(item[1], item[0])
         for item in self.boxList:
-            pygame.draw.rect(self.screen, "black", item[0])
+            pygame.draw.rect(self.screen, (0,0,0), item[0])
             self.screen.blit(item[1], item[0])
-        pygame.draw.rect(self.screen, "black", self.labelList[0][0])
+        pygame.draw.rect(self.screen, (0,0,0), self.labelList[0][0])
         self.screen.blit(self.labelList[0][1], self.labelList[0][0])
         for i in range(len(self.labelList)):
             if i != 0:
