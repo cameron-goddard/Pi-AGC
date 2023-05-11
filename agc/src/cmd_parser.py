@@ -1,3 +1,4 @@
+import util
 from display import Display
 from indicators import Indicators
 
@@ -8,13 +9,13 @@ class Parser:
     """
 
     def __init__(self, display: Display, indicators: Indicators) -> None:
-        self.display = display
-        self.indicators = indicators
+        self.display: Display = display
+        self.indicators: Indicators = indicators
 
-        self.verb_seq = []
-        self.noun_seq = []
+        self.verb_seq: list[int] = []
+        self.noun_seq: list[int] = []
 
-        self.last_action = None
+        self.last_action: str = None
 
     def enter(self, key: str) -> int:
         """
@@ -24,24 +25,26 @@ class Parser:
             key (str): A valid keystroke
 
         Returns:
-            int: A valid id for a program, -1 for an error, or -2 for incomplete
+            int: An id for a program, -1 for an error, or -2 for incomplete
         """
         
         if key == "v":
             self.last_action = "verb"
 
             if len(self.noun_seq) != 0:
-                self.display.clear_all(excluding="noun")
+                self.display.clear_all(excluding=["noun"])
             else:
                 self.display.clear_all()
+            return -2
             
         elif key == "n":
             self.last_action = "noun"
             
             if len(self.verb_seq) != 0:
-                self.display.clear_all(excluding="verb")
+                self.display.clear_all(excluding=["verb"])
             else:
                 self.display.clear_all()
+            return -2
 
         elif key == "program":
             pass
@@ -54,14 +57,26 @@ class Parser:
                 # TODO: flash opr err indicator
                 pass
 
+            if self.last_action == "prog":
+                if len(self.noun_seq) != 2:
+                    return -1
+                
+                return 
+                
+
+            if self.last_action == "verb" and self.verb_seq[0] == 3 and self.verb_seq[1] == 7:
+                self.last_action = "prog"
+                return -2
+
             self.last_action = None
             print(self)
             self.__clear()
             return self.__parse()
         else:
+            # Handle number key
             if len(self.noun_seq) != 0 and len(self.verb_seq) == 0:
                 # TODO: flash opr err indicator
-                pass
+                return -1
 
             if self.last_action == "verb":
                 if len(self.verb_seq) < 2:
@@ -80,8 +95,10 @@ class Parser:
         self.noun_seq = []
         self.noun = False
 
-    def __parse(self):
+    def __parse(self) -> int:
+        #if util.commands
         pass
+
 
     def __str__(self) -> str:
         v = ""

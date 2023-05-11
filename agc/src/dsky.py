@@ -5,19 +5,29 @@ import pygame
 from cmd_parser import Parser
 from display import Display
 from indicators import Indicators
-from progs.program import Program
+from typing import Callable
 
 class DSKY:
     """
     Manages all components of the DSKY interface and input processing.
     """
 
-    def __init__(self, progs: list[Program]) -> None:
+    def __init__(self) -> None:
         self.display = Display()
         self.indicators = Indicators()
         self.parser = Parser(self.display, self.indicators)
+        self.progs = None
 
         self._boot_time = round(time.time(), 2)
+
+
+        self.is_prog = False
+
+    def init_progs(self, progs: list[Callable]) -> None:
+        self.progs = progs
+
+    def foo(self):
+        print("in foo")
 
     def start(self) -> None:
         while True:
@@ -46,7 +56,10 @@ class DSKY:
         Returns:
             int: 0 if loading was successful, 1 if not
         """
-        pass
+        self.display.update_prog(id)
+        prog = self.progs[id]
+        prog(self)
+        
 
     def _curr_time(self) -> float:
         """
