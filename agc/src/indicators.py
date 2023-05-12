@@ -1,5 +1,5 @@
 
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import pygame
 import time
 
@@ -12,12 +12,22 @@ class Indicators:
         self.led_dict = {"TEMP": 12, "PROG": 1, "OPP ERR": 16}
         
         GPIO.setmode(GPIO.BCM)
+        
+        GPIO.setup(12, GPIO.OUT, initial = GPIO.LOW)
+        GPIO.setup(1, GPIO.OUT, initial = GPIO.LOW)
+        GPIO.setup(16, GPIO.OUT, initial = GPIO.LOW)   
 
     def clear_all(self) -> None:
-        pass
+        for pin in self.led_dict.values():
+            GPIO.output(pin, GPIO.LOW)
     
     def indicator_on(self, val: str) -> None:
         pin = self.led_dict[val]
+        GPIO.output(pin, GPIO.HIGH)
+    
+    def indicator_off(self, val: str) -> None:
+        pin = self.led_dict[val]
+        GPIO.output(pin, GPIO.LOW)
     
     """
     key - gpio
