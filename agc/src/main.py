@@ -1,4 +1,5 @@
 from dsky import DSKY
+#import RPi.GPIO as GPIO
 import pygame
 
 def test_prog(dsky: DSKY) -> None:
@@ -65,6 +66,13 @@ def tictactoe(dsky: DSKY) -> None:
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
+
+    GPIO.setmode(GPIO.BCM)
+
+    pins = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 26, 27]
+
+    for pin in pins:
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     dsky = DSKY()
     progs = [test_prog, tictactoe]

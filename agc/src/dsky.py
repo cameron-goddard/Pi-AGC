@@ -1,4 +1,4 @@
-#import Rpi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import time
 import pygame
 
@@ -32,47 +32,48 @@ class DSKY:
 
     def start(self) -> None:
         while True:
-            # try:
-            ret = None
-            events = pygame.event.get()
+            try:
+                ret = None
+                events = pygame.event.get()
             
-            for event in events:
+                for event in events:
 
                 
 
-                # Handle key events (debugging)
-                if event.type == pygame.KEYDOWN:
-                    ret = self.parser.enter(pygame.key.name(event.key))
+                    # Handle key events (debugging)
+                    if event.type == pygame.KEYDOWN:
+                        ret = self.parser.enter(pygame.key.name(event.key))
 
-                    if ret == -1:
-                        print("error")
-                        self.display.clear_all(excluding=["prog"])
-                    elif ret == -2:
-                        print("more to come")
-                        pass
-                    elif ret >= 0:
-                        print("prog")
-                        print(type(ret))
-                        print(ret)
-                        self.load_prog(ret)
-                    else:
-                        print("returned " + str(ret))
-                        if ret == -5:
-                            self.lamp_test()
-                        if ret == -6:
-                            self.query_curr_time()
-                        if ret == -7:
-                            self.update_curr_time()
+                        if ret == -1:
+                            print("error")
+                            self.display.clear_all(excluding=["prog"])
+                        elif ret == -2:
+                            print("more to come")
+                            pass
+                        elif ret >= 0:
+                            print("prog")
+                            print(type(ret))
+                            print(ret)
+                            self.load_prog(ret)
+                        else:
+                            print("returned " + str(ret))
+                            if ret == -5:
+                                self.lamp_test()
+                            if ret == -6:
+                                self.query_curr_time()
+                            if ret == -7:
+                                self.update_curr_time()
 
                 
-            self.display.blit_all()
-            pygame.display.flip()
+                self.display.blit_all()
+                pygame.display.flip()
                         
+            except KeyboardInterrupt:
+                GPIO.cleanup()  
                         
-                        
-            # except Exception as e:
-            #     print(e)
-            #     break
+            except Exception as e:
+                print(e)
+                break
 
     def load_prog(self, id: int) -> int:
         """
