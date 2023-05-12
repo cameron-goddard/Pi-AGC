@@ -97,6 +97,9 @@ def tictactoe(dsky: DSKY, input: str) -> int:
     global board, current_player, winner
     
     if input == None:
+        board = ["+", "+", "+", "+", "+", "+", "+", "+", "+"]
+        current_player = "0"
+        winner = None
         dsky.display.update_row(2, "{}{}{}  ".format(board[0], board[1], board[2]))
         dsky.display.update_row(1, "{}{}{}  ".format(board[3], board[4], board[5]))
         dsky.display.update_row(0, "{}{}{}  ".format(board[6], board[7], board[8]))
