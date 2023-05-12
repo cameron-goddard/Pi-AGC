@@ -14,7 +14,7 @@ def add_sub(dsky: DSKY, input: str) -> int:
         dsky.display.update_row(2, "+++++")
         dsky.display.update_row(1, "-----")
         dsky.display.update_row(0, "+++++")
-    elif input == "+":
+    elif input == "+" or input == "=":
         value += 1
         if value == 5:
             dsky.display.update_noun("05")
@@ -142,6 +142,8 @@ def tictactoe(dsky: DSKY, input: str) -> int:
     return -2
 
 def double_str(num: int) -> str:
+    if num < 0:
+        return "-" + str(num)
     if num < 10:
         return "0" + str(num)
     return str(num)

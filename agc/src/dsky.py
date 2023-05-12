@@ -5,6 +5,7 @@ except ImportError:
 import time
 import pygame
 import csv
+import os
 
 from cmd_parser import Parser
 from display import Display
@@ -105,6 +106,8 @@ class DSKY:
                                     self.show_vectors()
                                 if ret == -9:
                                     self.show_alarm_codes()
+                                if ret == -10:
+                                    self.quit_prog()
                         else:
                             ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
 
@@ -219,6 +222,9 @@ class DSKY:
         self.display.update_row(2, "00000")
         self.display.update_row(1, "00000")
         self.display.update_row(0, "000")
+
+    def quit_prog(self) -> None:
+        os.exit()
 
     def show_vectors(self) -> None:
         """
