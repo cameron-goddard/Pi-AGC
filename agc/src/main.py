@@ -1,18 +1,25 @@
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    pass
+
 from dsky import DSKY
-import RPi.GPIO as GPIO
 import pygame
-import time
 
-
-def idle(dsky: DSKY) -> None:
-    while (True):
-        continue
-
-def hello(dsky: DSKY, input: str) -> None:
+def hello(dsky: DSKY, input: str) -> int:
     dsky.display.update_row(2, "HELLO")
     dsky.display.update_row(1, "PROF")
     dsky.display.update_row(0, "SKOVIR")
     return 0
+
+secs_seq = []
+mins_seq = []
+hours_seq = []
+# def update_curr_time(dsky: DSKY, input: str) -> int:
+#     global secs_seq, mins_seq, hours_seq
+
+#     if input == None:
+
 
 board = ["+", "+", "+", "+", "+", "+", "+", "+", "+"]
 current_player = "0"
@@ -20,7 +27,6 @@ winner = None
 
 def tictactoe(dsky: DSKY, input: str) -> int:
     global board, current_player, winner
-    print(input)
     
     if input == None:
         dsky.display.update_row(2, "{}{}{}  ".format(board[0], board[1], board[2]))
@@ -63,6 +69,7 @@ def tictactoe(dsky: DSKY, input: str) -> int:
     current_player = "8" if current_player == "0" else "0"
     return -2
 
+#def calc(dsky: DSKY, input: str):
 
 
 if __name__ == "__main__":
@@ -71,12 +78,12 @@ if __name__ == "__main__":
 
     pygame.mouse.set_visible(0)
 
-    GPIO.setmode(GPIO.BCM)
+    #GPIO.setmode(GPIO.BCM)
 
     pins = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 26, 27]
 
-    for pin in pins:
-        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    # for pin in pins:
+    #     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     
 
@@ -85,7 +92,8 @@ if __name__ == "__main__":
     progs = [tictactoe, hello]
     dsky.init_progs(progs)
 
-    GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed)
-    GPIO.add_event_detect(20, GPIO.FALLING, callback=dsky.verb_keyed)
+    # GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed)
+    # GPIO.add_event_detect(20, GPIO.FALLING, callback=dsky.verb_keyed)
+    # GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed)
 
     dsky.start()

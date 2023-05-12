@@ -1,4 +1,7 @@
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    pass
 import time
 import pygame
 import csv
@@ -35,6 +38,9 @@ class DSKY:
         self.parser.enter("n")
         self.interrupted = True
 
+    def prog_keyed(self, channel):
+        self.current_prog = -1
+
     def start(self) -> None:
         while True:
             #try:
@@ -49,13 +55,11 @@ class DSKY:
                             ret = self.parser.enter(pygame.key.name(event.key))
 
                             if ret == -1:
-                                print("error")
                                 self.display.clear_all(excluding=["prog"])
+                                # Flash error indicator
                             elif ret == -2:
-                                print("more to come")
                                 pass
                             elif ret >= 0:
-                                print("prog")
                                 self.load_prog(ret)
                             else:
                                 print("returned " + str(ret))
@@ -123,12 +127,25 @@ class DSKY:
         """
         Basic DSKY lamp test: V35E
         """
-        self.display.update_prog("88")
-        self.display.update_verb("88")
-        self.display.update_noun("88")
+        self.interrupted = False
+
         self.display.update_row(0, "88888")
         self.display.update_row(1, "88888")
         self.display.update_row(2, "88888")
+        self.display.update_prog("88")
+
+        elapsed = 0.5
+        while (not self.interrupted and elapsed < 4):
+            self.display.update_verb("88")
+            self.display.update_noun("88")
+            time.sleep(0.5)
+            elapsed += 0.5
+           
+            self.display.update_verb("")
+            self.display.update_noun("")
+            time.sleep(0.5)
+            elapsed += 0.5
+        
 
     def query_curr_time(self) -> None:
         """
@@ -139,17 +156,20 @@ class DSKY:
 
         while (not self.interrupted):
             rounded = round(self._curr_time(), 2)
-            self.display.update_row(2, str(int(rounded / 3600)))
-            self.display.update_row(1, str(int(rounded / 60)))
-            self.display.update_row(0, str(int(rounded * 100)))
-            time.sleep(1)
+            secs = str(int(rounded / 3600))
+            mins = str(int(rounded / 60))
+            hours = str(int(rounded * 100))
 
+            self.display.update_row(2, "0" * (5 - len(secs)) + secs)
+            self.display.update_row(1, "0" * (5 - len(mins)) + mins)
+            self.display.update_row(0, "0" * (5 - len(hours)) + hours)
+            time.sleep(1)
 
     def update_curr_time(self) -> None:
         """
         Updates the current time: V25N36E
         """
-        pass
+        
 
     def clear_screen(self) -> None:
         """
