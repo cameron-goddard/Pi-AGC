@@ -1,12 +1,6 @@
-
-
-allowed_commands = {
-    "v35e": "Test lights",
-    "v16n65e": "Monitor current time",
-    "v06n62e": "Show vel/alt/att once",
-    "v16n62e": "Show vel/alt/att cont"
-}
-
 commands = [
-    ("v35e")
+    ("v35", -5),
+    ("v16n36", -6),
+    ("v16n65", -6),
+    ("v25n36", -7)
 ]

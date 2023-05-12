@@ -103,8 +103,8 @@ class Display:
                 pygame.draw.rect(self.screen, (0, 255, 1), self.labelList[i][0])
                 self.screen.blit(self.labelList[i][1], self.labelList[i][0])
     
-    def update_row(self, row: str, val: str) -> None:
-        self.rowList[int(row)][1] = self.font_dig.render(val, False, (0, 255, 1))
+    def update_row(self, row: int, val: str) -> None:
+        self.rowList[row][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.rowList[row][1], self.rowList[row][0])
 
     def update_verb(self, val: str) -> None:
@@ -119,16 +119,16 @@ class Display:
         self.boxList[0][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.boxList[0][1], self.boxList[0][0])
 
-    def clear_all(self, excluding: list[str] = None) -> None:
-        if not ("noun" in excluding):
-            self.update_noun("00")
-        if not ("verb" in excluding):
-            self.update_verb("00")
-        if not ("0" in excluding):
-            self.update_row(0, "00000")
-        if not ("1" in excluding):
-            self.update_row(1, "00000")
-        if not ("2" in excluding):
-            self.update_row(2, "00000")
-        if not ("prog" in excluding):
+    def clear_all(self, excluding: list[str] = []) -> None:
+        if "noun" not in excluding:
+            self.update_noun("")
+        if "verb" not in excluding:
+            self.update_verb("")
+        if "0" not in excluding:
+            self.update_row(0, "")
+        if "1" not in excluding:
+            self.update_row(1, "")
+        if "2" not in excluding:
+            self.update_row(2, "")
+        if "prog" not in excluding:
             self.update_prog("")
