@@ -43,120 +43,76 @@ class DSKY:
 
     def start(self) -> None:
         while True:
-            ret = None
-            key = "99"
+            # ret = None
+            # key = "99"
 
-            if (not GPIO.input(15)):
-                time.sleep(0.2)
-                key = "-"
-            if (not GPIO.input(13)):
-                time.sleep(0.2)
-                key = "+"
-            if (not GPIO.input(11)):
-                time.sleep(0.2)
-                key = "0"
-            if (not GPIO.input(0)):
-                time.sleep(0.2)
-                key = "1"
-            if (not GPIO.input(5)):
-                time.sleep(0.2)
-                key = "2"
-            if (not GPIO.input(6)):
-                time.sleep(0.2)
-                key = "3"
-            if (not GPIO.input(18)):
-                time.sleep(0.2)
-                key = "4"
-            if (not GPIO.input(23)):
-                time.sleep(0.2)
-                key = "5"
-            if (not GPIO.input(24)):
-                time.sleep(0.2)
-                key = "6"
-            if (not GPIO.input(9)):
-                time.sleep(0.2)
-                key = "7"
-            if (not GPIO.input(10)):
-                time.sleep(0.2)
-                key = "8" # DNE
-            if (not GPIO.input(22)):
-                time.sleep(0.2)
-                key = "9"
-            if (not GPIO.input(21)):
-                time.sleep(0.2)
-                key = "return"
-            if (not GPIO.input(19)):
-                time.sleep(0.2)
-                key = "v"
-            if (not GPIO.input(14)):
-                time.sleep(0.2)
-                key = "n"
+            
             
                 
-            if self.current_prog == -1:
-                if key != "99":
-                    ret = self.parser.enter(key)
+            # if self.current_prog == -1:
+            #     if key != "99":
+            #         ret = self.parser.enter(key)
 
-                if ret == -1:
-                    self.display.clear_all(excluding=["prog"])
-                elif ret == -2:
-                    pass
-                elif ret >= 0:
-                    self.load_prog(ret)
-                else:
-                    if ret == -5:
-                        self.lamp_test()
-                    if ret == -6:
-                        self.query_curr_time()
-                    if ret == -7:
-                        self.update_curr_time()
-                    if ret == -8:
-                        self.show_vectors()
-                    if ret == -9:
-                        self.show_alarm_codes()
-            else:
-                ret = self.progs[self.current_prog](self, key)
+            #     if ret == -1:
+            #         self.display.clear_all(excluding=["prog"])
+            #     elif ret == -2:
+            #         pass
+            #     elif ret >= 0:
+            #         self.load_prog(ret)
+            #     else:
+            #         if ret == -5:
+            #             self.lamp_test()
+            #         if ret == -6:
+            #             self.query_curr_time()
+            #         if ret == -7:
+            #             self.update_curr_time()
+            #         if ret == -8:
+            #             self.show_vectors()
+            #         if ret == -9:
+            #             self.show_alarm_codes()
+            # else:
+            #     ret = self.progs[self.current_prog](self, key)
 
-                if ret == 0:
-                    self.current_prog = -1
+            #     if ret == 0:
+            #         self.current_prog = -1
 
-            self.display.blit_all()
-            pygame.display.flip()
+            # self.display.blit_all()
+            # pygame.display.flip()
 
 
-                # events = pygame.event.get()
-                # for event in events:
-                #     # Handle key events (debugging)
-                #     if event.type == pygame.KEYDOWN:
-                #         if self.current_prog == -1:
-                #             ret = self.parser.enter(pygame.key.name(event.key))
+                events = pygame.event.get()
+                for event in events:
+                    # Handle key events (debugging)
+                    if event.type == pygame.KEYDOWN:
+                        if self.current_prog == -1:
+                            ret = self.parser.enter(pygame.key.name(event.key))
 
-                #             if ret == -1:
-                #                 self.display.clear_all(excluding=["prog"])
-                #                 # Flash error indicator
-                #             elif ret == -2:
-                #                 pass
-                #             elif ret >= 0:
-                #                 self.load_prog(ret)
-                #             else:
-                #                 if ret == -5:
-                #                     self.lamp_test()
-                #                 if ret == -6:
-                #                     self.query_curr_time()
-                #                 if ret == -7:
-                #                     self.update_curr_time()
-                #                 if ret == -8:
-                #                     self.show_vectors()
-                #                 if ret == -9:
-                #                     self.show_alarm_codes()
-                #         else:
-                #             ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
+                            if ret == -1:
+                                self.display.clear_all(excluding=["prog"])
+                                # Flash error indicator
+                            elif ret == -2:
+                                pass
+                            elif ret >= 0:
+                                self.load_prog(ret)
+                            else:
+                                if ret == -5:
+                                    self.lamp_test()
+                                if ret == -6:
+                                    self.query_curr_time()
+                                if ret == -7:
+                                    self.update_curr_time()
+                                if ret == -8:
+                                    self.show_vectors()
+                                if ret == -9:
+                                    self.show_alarm_codes()
+                        else:
+                            ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
 
-                #             if ret == 0:
-                #                 self.current_prog = -1
+                            if ret == 0:
+                                self.current_prog = -1
                                 
-                # self.display.blit_all()
-                # pygame.display.flip()
+                self.display.blit_all()
+                pygame.display.flip()
 
     def load_prog(self, id: int) -> int:
         """

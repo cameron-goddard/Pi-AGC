@@ -166,8 +166,33 @@ if __name__ == "__main__":
     progs = [tictactoe, ece, add_sub, update_curr_time]
     dsky.init_progs(progs)
 
-    GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed)
-    GPIO.add_event_detect(19, GPIO.FALLING, callback=dsky.verb_keyed)
-    GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed)
+    GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed, bouncetime=400)
+    GPIO.add_event_detect(19, GPIO.FALLING, callback=dsky.verb_keyed, bouncetime=400)
+    GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed, bouncetime=400)
+
+    GPIO.add_event_detect(15, GPIO.FALLING, callback=dsky.minus, bouncetime=400)
+    GPIO.add_event_detect(13, GPIO.FALLING, callback=dsky.plus, bouncetime=400)
+    GPIO.add_event_detect(11, GPIO.FALLING, callback=dsky.zero, bouncetime=400)
+    GPIO.add_event_detect(0, GPIO.FALLING, callback=dsky.one, bouncetime=400)
+    GPIO.add_event_detect(5, GPIO.FALLING, callback=dsky.two, bouncetime=400)
+    GPIO.add_event_detect(6, GPIO.FALLING, callback=dsky.three, bouncetime=400)
+    GPIO.add_event_detect(18, GPIO.FALLING, callback=dsky.four, bouncetime=400)
+    GPIO.add_event_detect(23, GPIO.FALLING, callback=dsky.five, bouncetime=400)
+    GPIO.add_event_detect(24, GPIO.FALLING, callback=dsky.six, bouncetime=400)
+    GPIO.add_event_detect(9, GPIO.FALLING, callback=dsky.seven, bouncetime=400)
+
+    GPIO.add_event_detect(22, GPIO.FALLING, callback=dsky.nine, bouncetime=400)
+    GPIO.add_event_detect(27, GPIO.FALLING, callback=dsky.clear, bouncetime=400)
+    GPIO.add_event_detect(26, GPIO.FALLING, callback=dsky.enter, bouncetime=400)
+
+
+
+
+    
+
+
+
+
+
 
     dsky.start()
