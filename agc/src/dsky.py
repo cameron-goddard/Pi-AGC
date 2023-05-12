@@ -44,7 +44,7 @@ class DSKY:
     def start(self) -> None:
         while True:
             ret = None
-            key = ""
+            key = "99"
 
             if (not GPIO.input(15)):
                 time.sleep(0.2)
@@ -94,7 +94,8 @@ class DSKY:
             
                 
             if self.current_prog == -1:
-                ret = self.parser.enter(key)
+                if key != "99":
+                    ret = self.parser.enter(key)
 
                 if ret == -1:
                     self.display.clear_all(excluding=["prog"])
