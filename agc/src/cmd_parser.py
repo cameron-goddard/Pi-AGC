@@ -53,6 +53,10 @@ class Parser:
             pass
         elif key == "reset":
             pass
+        elif key == "-":
+            pass
+        elif key == "+":
+            pass
         elif key == "return":
             if self.last_action == None:
                 # TODO: flash opr err indicator

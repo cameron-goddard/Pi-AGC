@@ -21,8 +21,8 @@ class Display:
         self.font_cor = pygame.font.SysFont('Gill Sans MT', self.label_height*3)
         
         # Initialize screen sections and values
-        #self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]), pygame.FULLSCREEN)
-        self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]))
+        self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]), pygame.FULLSCREEN)
+        #self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]))
         self.rowList = []
         self.boxList = []
         self.labelList = []

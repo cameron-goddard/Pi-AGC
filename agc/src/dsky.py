@@ -43,49 +43,103 @@ class DSKY:
 
     def start(self) -> None:
         while True:
-            #try:
-                ret = None
-                events = pygame.event.get()
-            
-                for event in events:
+            ret = None
+            key = None
 
-                    # Handle key events (debugging)
-                    if event.type == pygame.KEYDOWN:
-                        if self.current_prog == -1:
-                            ret = self.parser.enter(pygame.key.name(event.key))
+            if (not GPIO.input(15)):
+                key = "-"
+            elif (not GPIO.input(13)):
+                key = "+"
+            elif (not GPIO.input(11)):
+                key = "0"
+            elif (not GPIO.input(0)):
+                key = "1"
+            elif (not GPIO.input(5)):
+                key = "2"
+            elif (not GPIO.input(6)):
+                key = "3"
+            elif (not GPIO.input(18)):
+                key = "4"
+            elif (not GPIO.input(23)):
+                key = "5"
+            elif (not GPIO.input(24)):
+                key = "6"
+            elif (not GPIO.input(9)):
+                key = "7"
+            elif (not GPIO.input(10)):
+                key = "8" # DNE
+            elif (not GPIO.input(22)):
+                key = "9"
+            elif (not GPIO.input(21)):
+                key = "return"
+            elif (not GPIO.input(19)):
+                key = "v"
+            elif (not GPIO.input(14)):
+                key = "n"
+                
+            if self.current_prog == -1:
+                ret = self.parser.enter(key)
 
-                            if ret == -1:
-                                self.display.clear_all(excluding=["prog"])
-                                # Flash error indicator
-                            elif ret == -2:
-                                pass
-                            elif ret >= 0:
-                                self.load_prog(ret)
-                            else:
-                                print("returned " + str(ret))
-                                if ret == -5:
-                                    self.lamp_test()
-                                if ret == -6:
-                                    self.query_curr_time()
-                                if ret == -7:
-                                    self.update_curr_time()
-                                if ret == -8:
-                                    self.show_vectors()
-                        else:
-                            ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
+                if ret == -1:
+                    self.display.clear_all(excluding=["prog"])
+                elif ret == -2:
+                    pass
+                elif ret >= 0:
+                    self.load_prog(ret)
+                else:
+                    if ret == -5:
+                        self.lamp_test()
+                    if ret == -6:
+                        self.query_curr_time()
+                    if ret == -7:
+                        self.update_curr_time()
+                    if ret == -8:
+                        self.show_vectors()
+                    if ret == -9:
+                        self.show_alarm_codes()
+            else:
+                ret = self.progs[self.current_prog](self, key)
 
-                            if ret == 0:
-                                self.current_prog = -1
+                if ret == 0:
+                    self.current_prog = -1
+
+            self.display.blit_all()
+            pygame.display.flip()
+
+
+                # events = pygame.event.get()
+                # for event in events:
+                #     # Handle key events (debugging)
+                #     if event.type == pygame.KEYDOWN:
+                #         if self.current_prog == -1:
+                #             ret = self.parser.enter(pygame.key.name(event.key))
+
+                #             if ret == -1:
+                #                 self.display.clear_all(excluding=["prog"])
+                #                 # Flash error indicator
+                #             elif ret == -2:
+                #                 pass
+                #             elif ret >= 0:
+                #                 self.load_prog(ret)
+                #             else:
+                #                 if ret == -5:
+                #                     self.lamp_test()
+                #                 if ret == -6:
+                #                     self.query_curr_time()
+                #                 if ret == -7:
+                #                     self.update_curr_time()
+                #                 if ret == -8:
+                #                     self.show_vectors()
+                #                 if ret == -9:
+                #                     self.show_alarm_codes()
+                #         else:
+                #             ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
+
+                #             if ret == 0:
+                #                 self.current_prog = -1
                                 
-                self.display.blit_all()
-                pygame.display.flip()
-                        
-            # except KeyboardInterrupt:
-            #     GPIO.cleanup()  
-                        
-            # except Exception as e:
-            #     print(e)
-            #     break
+                # self.display.blit_all()
+                # pygame.display.flip()
 
     def load_prog(self, id: int) -> int:
         """
@@ -170,6 +224,13 @@ class DSKY:
         Updates the current time: V25N36E
         """
         
+    def show_alarm_codes(self) -> None:
+        """
+        Shows recent alarm codes: V05N09E
+        """
+        self.display.update_row(2, "01105")
+        self.display.update_row(1, "01106")
+        self.display.update_row(0, "00000")
 
     def clear_screen(self) -> None:
         """

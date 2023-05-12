@@ -6,19 +6,87 @@ except ImportError:
 from dsky import DSKY
 import pygame
 
-def hello(dsky: DSKY, input: str) -> int:
-    dsky.display.update_row(2, "HELLO")
-    dsky.display.update_row(1, "PROF")
-    dsky.display.update_row(0, "SKOVIR")
+value = 0
+def add_sub(dsky: DSKY, input: str) -> int:
+    global value
+    if input == None:
+        value = 0
+        dsky.display.update_row(2, "+++++")
+        dsky.display.update_row(1, "-----")
+        dsky.display.update_row(0, "+++++")
+    elif input == "+":
+        value += 1
+        if value == 5:
+            dsky.display.update_noun("05")
+            return 0
+    elif input == "-":
+        value -= 1
+        if value == -5:
+            dsky.display.update_noun("-5")
+            return 0
+    else:
+        return -1
+    
+    dsky.display.update_noun(double_str(value))
+    return -2
+    
+def ece(dsky: DSKY, input: str) -> int:
+    dsky.display.update_row(2, "ILOVE")
+    dsky.display.update_row(1, "ECE")
+    dsky.display.update_row(0, "5725")
     return 0
 
 secs_seq = []
 mins_seq = []
 hours_seq = []
-# def update_curr_time(dsky: DSKY, input: str) -> int:
-#     global secs_seq, mins_seq, hours_seq
+curr_seq = "hours"
+def update_curr_time(dsky: DSKY, input: str) -> int:
+    global secs_seq, mins_seq, hours_seq, curr_seq
 
-#     if input == None:
+    if input == None:
+        dsky.display.update_verb("21")
+        dsky.display.update_noun("36")
+    else:
+        if input == "clear":
+            if curr_seq == "hours":
+                hours_seq = []
+            elif curr_seq == "minutes":
+                mins_seq = []
+            else:
+                secs_seq = []
+
+        elif input == "enter":
+            if curr_seq == "hours":
+                if len(hours_seq) == 5:
+                    curr_seq = "minutes"
+                else:
+                    return -1
+            elif curr_seq == "minutes":
+                if len(mins_seq) == 5:
+                    curr_seq = "seconds"
+                    dsky.display.update_row()
+                    return -2
+                else:
+                    return -1
+            elif curr_seq == "seconds":
+                if len(secs_seq) == 5:
+                    #change time
+                    #dsky._boot_time = 
+                    return 0
+                else:
+                    return -1
+        else:
+            num = None
+            try:
+                num = int(input)
+            except ValueError:
+                return -1
+            if curr_seq == "hours":
+                hours_seq.append(num)
+            elif curr_seq == "minutes":
+                mins_seq.append(num)
+            else:
+                secs_seq.append(num)
 
 
 board = ["+", "+", "+", "+", "+", "+", "+", "+", "+"]
@@ -60,17 +128,23 @@ def tictactoe(dsky: DSKY, input: str) -> int:
             dsky.display.update_row(2, "000")
             dsky.display.update_row(1, "0+0")
             dsky.display.update_row(0, "000")
+        elif winner == "8":
+            dsky.display.update_row(2, "9+9")
+            dsky.display.update_row(1, "+9+")
+            dsky.display.update_row(0, "9+9")
         else:
-            dsky.display.update_row(2, "8+8")
-            dsky.display.update_row(1, "+8+")
-            dsky.display.update_row(0, "8+8")
+            dsky.display.update_row(2, "333")
+            dsky.display.update_row(1, "+3+")
+            dsky.display.update_row(0, "+3+")
         return 0
         
-    current_player = "8" if current_player == "0" else "0"
+    current_player = "9" if current_player == "0" else "0"
     return -2
 
-#def calc(dsky: DSKY, input: str):
-
+def double_str(num: int) -> str:
+    if num < 10:
+        return "0" + str(num)
+    return str(num)
 
 if __name__ == "__main__":
     pygame.init()
@@ -78,22 +152,22 @@ if __name__ == "__main__":
 
     pygame.mouse.set_visible(0)
 
-    #GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BCM)
 
     pins = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 26, 27]
 
-    # for pin in pins:
-    #     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    for pin in pins:
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     
 
 
     dsky = DSKY()
-    progs = [tictactoe, hello]
+    progs = [tictactoe, ece, add_sub, update_curr_time]
     dsky.init_progs(progs)
 
-    # GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed)
-    # GPIO.add_event_detect(20, GPIO.FALLING, callback=dsky.verb_keyed)
-    # GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed)
+    GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed)
+    GPIO.add_event_detect(19, GPIO.FALLING, callback=dsky.verb_keyed)
+    GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed)
 
     dsky.start()
