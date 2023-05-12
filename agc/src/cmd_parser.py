@@ -27,6 +27,7 @@ class Parser:
         Returns:
             int: An id for a program, -1 for an error, or -2 for incomplete
         """
+        self.__status()
         
         if key == "v":
             self.last_action = "verb"
@@ -55,38 +56,48 @@ class Parser:
         elif key == "return":
             if self.last_action == None:
                 # TODO: flash opr err indicator
-                pass
+                return -1
 
             if self.last_action == "prog":
                 if len(self.noun_seq) != 2:
                     return -1
                 
-                return 
-                
+                self.last_action = None
+                temp_seq = self.noun_seq
+                self.__clear()
+                print("returning prog " + ''.join(str(n) for n in temp_seq))
+                return int(''.join(str(n) for n in temp_seq))
 
             if self.last_action == "verb" and self.verb_seq[0] == 3 and self.verb_seq[1] == 7:
                 self.last_action = "prog"
                 return -2
 
             self.last_action = None
-            print(self)
-            self.__clear()
-            return self.__parse()
+            print("going into parse command")
+            return self.__parse_commands()
         else:
             # Handle number key
             if len(self.noun_seq) != 0 and len(self.verb_seq) == 0:
-                # TODO: flash opr err indicator
+                self.display.clear_all(excluding=["prog"])
                 return -1
+            
+            num = int(key)
 
             if self.last_action == "verb":
                 if len(self.verb_seq) < 2:
-                    self.verb_seq.append(key)
+                    self.verb_seq.append(num)
+                    self.display.update_verb(''.join(str(v) for v in self.verb_seq))
             elif self.last_action == "noun":
                 if len(self.noun_seq) < 2:
-                    self.noun_seq.append(key)
+                    self.noun_seq.append(num)
+                    self.display.update_noun(''.join(str(v) for v in self.noun_seq))
+            elif self.last_action == "prog":
+                if len(self.noun_seq) < 2:
+                    self.noun_seq.append(num)
+                    self.display.update_noun(''.join(str(v) for v in self.noun_seq))
             else:
-                self.display.clear_all()
-            
+                self.display.clear_all(excluding=["prog"])
+            return -2
                 
     def __clear(self) -> None:
         self.verb_seq = []
@@ -95,9 +106,13 @@ class Parser:
         self.noun_seq = []
         self.noun = False
 
-    def __parse(self) -> int:
-        #if util.commands
-        pass
+    def __parse_commands(self) -> int:
+        ret = -1
+        for comm in util.commands:
+            if comm[0] == self.__str__():
+                ret = comm[1]
+        self.__clear()
+        return ret
 
 
     def __str__(self) -> str:
@@ -108,3 +123,10 @@ class Parser:
         if len(self.noun_seq) != 0:
             n = "n" + ''.join(str(n) for n in self.noun_seq)
         return v + n
+    
+    def __status(self) -> None:
+        print("Status-------------")
+        print("verb seq: " + ''.join(str(v) for v in self.verb_seq))
+        print("noun seq: " + ''.join(str(n) for n in self.noun_seq))
+        print("last action: " + self.last_action if self.last_action != None else "None")
+        print("-------------------")

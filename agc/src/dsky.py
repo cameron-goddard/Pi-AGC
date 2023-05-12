@@ -1,4 +1,4 @@
-#import Rpi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import time
 import pygame
 
@@ -16,38 +16,64 @@ class DSKY:
         self.display = Display()
         self.indicators = Indicators()
         self.parser = Parser(self.display, self.indicators)
-        self.progs = None
+        self.progs = []
 
         self._boot_time = round(time.time(), 2)
 
 
-        self.is_prog = False
+        self.current_prog = -1
 
     def init_progs(self, progs: list[Callable]) -> None:
         self.progs = progs
 
     def foo(self):
+        self.display.update_row(0, "42")
         print("in foo")
 
     def start(self) -> None:
         while True:
-            # try:
-            ret = None
-            events = pygame.event.get()
-            for event in events:
+            try:
+                ret = None
+                events = pygame.event.get()
+            
+                for event in events:
 
-                # Handle key events (debugging)
-                if event.type == pygame.KEYDOWN:
-                    ret = self.parser.enter(pygame.key.name(event.key))
                 
-            self.display.blit_all()
-            pygame.display.flip()
+
+                    # Handle key events (debugging)
+                    if event.type == pygame.KEYDOWN:
+                        ret = self.parser.enter(pygame.key.name(event.key))
+
+                        if ret == -1:
+                            print("error")
+                            self.display.clear_all(excluding=["prog"])
+                        elif ret == -2:
+                            print("more to come")
+                            pass
+                        elif ret >= 0:
+                            print("prog")
+                            print(type(ret))
+                            print(ret)
+                            self.load_prog(ret)
+                        else:
+                            print("returned " + str(ret))
+                            if ret == -5:
+                                self.lamp_test()
+                            if ret == -6:
+                                self.query_curr_time()
+                            if ret == -7:
+                                self.update_curr_time()
+
+                
+                self.display.blit_all()
+                pygame.display.flip()
                         
+            except KeyboardInterrupt:
+                GPIO.cleanup()  
                         
-                        
-            # except Exception as e:
-            #     print(e)
-            #     break
+            except Exception as e:
+                print(e)
+                break
 
     def load_prog(self, id: int) -> int:
         """
@@ -59,7 +85,16 @@ class DSKY:
         Returns:
             int: 0 if loading was successful, 1 if not
         """
-        self.display.update_prog(id)
+        if id >= len(self.progs):
+            self.display.clear_all()
+            # TODO: flash error indicator
+            return 1
+        
+        self.current_prog = id
+        self.display.update_prog(double_str(id))
+        self.display.clear_all(excluding=["prog"])
+        # TODO: flash comp acty
+        
         prog = self.progs[id]
         prog(self)
         
@@ -79,9 +114,12 @@ class DSKY:
         """
         Basic DSKY lamp test: V35E
         """
-        self.display.update_row(0, 88888)
-        self.display.update_row(1, 88888)
-        self.display.update_row(2, 88888)
+        self.display.update_prog("88")
+        self.display.update_verb("88")
+        self.display.update_noun("88")
+        self.display.update_row(0, "88888")
+        self.display.update_row(1, "88888")
+        self.display.update_row(2, "88888")
 
         # TODO: flash verb, noun, key-rel, opr-err. Think about input interrupt
 
@@ -89,7 +127,12 @@ class DSKY:
         """
         Queries the current time since startup or last update: V16N36E, V16N65E
         """
-        pass
+        local = time.localtime(self._curr_time())
+
+        self.display.update_row(0, str(local.tm_hour))
+        self.display.update_row(1, str(local.tm_min))
+        self.display.update_row(2, str(int((self._curr_time() % 1) * 100)))
+
 
     def update_curr_time(self) -> None:
         """
@@ -115,3 +158,10 @@ class DSKY:
         Continuously shows velocity, altitude rate, altitude in R1, R2, R3 respectively: V16N62
         """
         pass
+
+
+
+def double_str(num: int) -> str:
+    if num < 10:
+        return "0" + str(num)
+    return str(num)
