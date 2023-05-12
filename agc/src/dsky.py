@@ -164,6 +164,10 @@ class DSKY:
         self.display.update_row(2, "88888")
         self.display.update_prog("88")
 
+        self.indicators.indicator_on("TEMP")
+        self.indicators.indicator_on("OPR ERR")
+        self.indicators.indicator_on("PROG")
+
         elapsed = 0.5
         while (not self.interrupted and elapsed < 4):
             self.display.update_verb("88")
@@ -175,6 +179,10 @@ class DSKY:
             self.display.update_noun("")
             time.sleep(0.5)
             elapsed += 0.5
+
+        self.indicators.indicator_off("TEMP")
+        self.indicators.indicator_off("OPR ERR")
+        self.indicators.indicator_off("PROG")
         
 
     def query_curr_time(self) -> None:
