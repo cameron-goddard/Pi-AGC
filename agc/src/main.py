@@ -154,8 +154,8 @@ if __name__ == "__main__":
 
     GPIO.setmode(GPIO.BCM)
 
-    pins = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27]
-
+    #pins = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27]
+    pins = [14, 17, 19]
     for pin in pins:
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -167,32 +167,7 @@ if __name__ == "__main__":
     dsky.init_progs(progs)
 
     GPIO.add_event_detect(14, GPIO.FALLING, callback=dsky.noun_keyed, bouncetime=400)
-    GPIO.add_event_detect(19, GPIO.FALLING, callback=dsky.verb_keyed, bouncetime=400)
+    GPIO.add_event_detect(19, GPIO.FALLING, callback=dsky.verb_keyed, bouncetime=400) # reset
     GPIO.add_event_detect(17, GPIO.FALLING, callback=dsky.prog_keyed, bouncetime=400)
-
-    GPIO.add_event_detect(15, GPIO.FALLING, callback=dsky.minus, bouncetime=400)
-    GPIO.add_event_detect(13, GPIO.FALLING, callback=dsky.plus, bouncetime=400)
-    GPIO.add_event_detect(11, GPIO.FALLING, callback=dsky.zero, bouncetime=400)
-    GPIO.add_event_detect(0, GPIO.FALLING, callback=dsky.one, bouncetime=400)
-    GPIO.add_event_detect(5, GPIO.FALLING, callback=dsky.two, bouncetime=400)
-    GPIO.add_event_detect(6, GPIO.FALLING, callback=dsky.three, bouncetime=400)
-    GPIO.add_event_detect(18, GPIO.FALLING, callback=dsky.four, bouncetime=400)
-    GPIO.add_event_detect(23, GPIO.FALLING, callback=dsky.five, bouncetime=400)
-    GPIO.add_event_detect(24, GPIO.FALLING, callback=dsky.six, bouncetime=400)
-    GPIO.add_event_detect(9, GPIO.FALLING, callback=dsky.seven, bouncetime=400)
-
-    GPIO.add_event_detect(22, GPIO.FALLING, callback=dsky.nine, bouncetime=400)
-    GPIO.add_event_detect(27, GPIO.FALLING, callback=dsky.clear, bouncetime=400)
-    GPIO.add_event_detect(26, GPIO.FALLING, callback=dsky.enter, bouncetime=400)
-
-
-
-
-    
-
-
-
-
-
 
     dsky.start()
