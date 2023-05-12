@@ -76,6 +76,8 @@ class DSKY:
                 key = "v"
             elif (not GPIO.input(14)):
                 key = "n"
+            else:
+                key = "4"
                 
             if self.current_prog == -1:
                 ret = self.parser.enter(key)
