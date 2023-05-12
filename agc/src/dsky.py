@@ -95,7 +95,7 @@ class DSKY:
                                 # Flash error indicator
                             elif ret == -2:
                                 self.indicators.indicator_off("OPR ERR")
-                                
+                                self.indicators.indicator_off("PROG")
                             elif ret >= 0:
                                 self.indicators.indicator_off("OPR ERR")
                                 self.indicators.indicator_on("PROG")
