@@ -90,12 +90,16 @@ class DSKY:
 
                             if ret == -1:
                                 self.display.clear_all(excluding=["prog"])
+                                self.indicators.indicator_on("OPR ERR")
                                 # Flash error indicator
                             elif ret == -2:
-                                pass
+                                self.indicators.indicator_off("OPR ERR")
+                                
                             elif ret >= 0:
+                                self.indicators.indicator_off("OPR ERR")
                                 self.load_prog(ret)
                             else:
+                                self.indicators.indicator_off("OPR ERR")
                                 if ret == -5:
                                     self.lamp_test()
                                 if ret == -6:
