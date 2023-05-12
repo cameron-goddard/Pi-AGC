@@ -44,57 +44,54 @@ class DSKY:
     def start(self) -> None:
         while True:
             ret = None
-            key = None
+            key = ""
 
             if (not GPIO.input(15)):
                 time.sleep(0.2)
                 key = "-"
-            elif (not GPIO.input(13)):
+            if (not GPIO.input(13)):
                 time.sleep(0.2)
                 key = "+"
-            elif (not GPIO.input(11)):
+            if (not GPIO.input(11)):
                 time.sleep(0.2)
                 key = "0"
-            elif (not GPIO.input(0)):
+            if (not GPIO.input(0)):
                 time.sleep(0.2)
                 key = "1"
-            elif (not GPIO.input(5)):
+            if (not GPIO.input(5)):
                 time.sleep(0.2)
                 key = "2"
-            elif (not GPIO.input(6)):
+            if (not GPIO.input(6)):
                 time.sleep(0.2)
                 key = "3"
-            elif (not GPIO.input(18)):
+            if (not GPIO.input(18)):
                 time.sleep(0.2)
                 key = "4"
-            elif (not GPIO.input(23)):
+            if (not GPIO.input(23)):
                 time.sleep(0.2)
                 key = "5"
-            elif (not GPIO.input(24)):
+            if (not GPIO.input(24)):
                 time.sleep(0.2)
                 key = "6"
-            elif (not GPIO.input(9)):
+            if (not GPIO.input(9)):
                 time.sleep(0.2)
                 key = "7"
-            elif (not GPIO.input(10)):
+            if (not GPIO.input(10)):
                 time.sleep(0.2)
                 key = "8" # DNE
-            elif (not GPIO.input(22)):
+            if (not GPIO.input(22)):
                 time.sleep(0.2)
                 key = "9"
-            elif (not GPIO.input(21)):
+            if (not GPIO.input(21)):
                 time.sleep(0.2)
                 key = "return"
-            elif (not GPIO.input(19)):
+            if (not GPIO.input(19)):
                 time.sleep(0.2)
                 key = "v"
-            elif (not GPIO.input(14)):
+            if (not GPIO.input(14)):
                 time.sleep(0.2)
                 key = "n"
-            else:
-                time.sleep(0.2)
-                print("IN HERE LSDHFLSDAJFHLSADKFJLSDKFJSLDKFJSDLFKJSDLJ")
-                key = "4"
+            
                 
             if self.current_prog == -1:
                 ret = self.parser.enter(key)
