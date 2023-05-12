@@ -1,6 +1,7 @@
 #import RPi.GPIO as GPIO
 import time
 import pygame
+import csv
 
 from cmd_parser import Parser
 from display import Display
@@ -20,60 +21,67 @@ class DSKY:
 
         self._boot_time = round(time.time(), 2)
 
-
         self.current_prog = -1
+        self.interrupted = False
 
     def init_progs(self, progs: list[Callable]) -> None:
         self.progs = progs
 
-    def foo(self):
-        self.display.update_row(0, "42")
-        print("in foo")
+    def verb_keyed(self, channel):
+        self.parser.enter("v")
+        self.interrupted = True
+
+    def noun_keyed(self, channel):
+        self.parser.enter("n")
+        self.interrupted = True
 
     def start(self) -> None:
         while True:
-            try:
+            #try:
                 ret = None
                 events = pygame.event.get()
             
                 for event in events:
 
-                
-
                     # Handle key events (debugging)
                     if event.type == pygame.KEYDOWN:
-                        ret = self.parser.enter(pygame.key.name(event.key))
+                        if self.current_prog == -1:
+                            ret = self.parser.enter(pygame.key.name(event.key))
 
-                        if ret == -1:
-                            print("error")
-                            self.display.clear_all(excluding=["prog"])
-                        elif ret == -2:
-                            print("more to come")
-                            pass
-                        elif ret >= 0:
-                            print("prog")
-                            print(type(ret))
-                            print(ret)
-                            self.load_prog(ret)
+                            if ret == -1:
+                                print("error")
+                                self.display.clear_all(excluding=["prog"])
+                            elif ret == -2:
+                                print("more to come")
+                                pass
+                            elif ret >= 0:
+                                print("prog")
+                                self.load_prog(ret)
+                            else:
+                                print("returned " + str(ret))
+                                if ret == -5:
+                                    self.lamp_test()
+                                if ret == -6:
+                                    self.query_curr_time()
+                                if ret == -7:
+                                    self.update_curr_time()
+                                if ret == -8:
+                                    self.show_vectors()
                         else:
-                            print("returned " + str(ret))
-                            if ret == -5:
-                                self.lamp_test()
-                            if ret == -6:
-                                self.query_curr_time()
-                            if ret == -7:
-                                self.update_curr_time()
+                            ret = self.progs[self.current_prog](self, pygame.key.name(event.key))
 
-                
+                            if ret == 0:
+                                self.current_prog = -1
+                                
                 self.display.blit_all()
                 pygame.display.flip()
                         
-            except KeyboardInterrupt:
-                GPIO.cleanup()  
+            # except KeyboardInterrupt:
+            #     GPIO.cleanup()  
                         
-            except Exception as e:
-                print(e)
-                break
+            # except Exception as e:
+            #     print(e)
+            #     break
 
     def load_prog(self, id: int) -> int:
         """
@@ -96,7 +104,7 @@ class DSKY:
         # TODO: flash comp acty
         
         prog = self.progs[id]
-        prog(self)
+        prog(self, None)
         
 
     def _curr_time(self) -> float:
@@ -106,6 +114,7 @@ class DSKY:
         Returns:
             float: The time, rounded to the nearest hundredth of a second
         """
+        print("curr time: ", round(time.time(), 2) - self._boot_time)
         return round(time.time(), 2) - self._boot_time
 
     # Defined below are default computer-specific behaviors (programs)
@@ -121,17 +130,19 @@ class DSKY:
         self.display.update_row(1, "88888")
         self.display.update_row(2, "88888")
 
-        # TODO: flash verb, noun, key-rel, opr-err. Think about input interrupt
-
     def query_curr_time(self) -> None:
         """
         Queries the current time since startup or last update: V16N36E, V16N65E
         """
-        local = time.localtime(self._curr_time())
+        self.interrupted = False
+        rounded = round(self._curr_time(), 2)
 
-        self.display.update_row(0, str(local.tm_hour))
-        self.display.update_row(1, str(local.tm_min))
-        self.display.update_row(2, str(int((self._curr_time() % 1) * 100)))
+        while (not self.interrupted):
+            rounded = round(self._curr_time(), 2)
+            self.display.update_row(2, str(int(rounded / 3600)))
+            self.display.update_row(1, str(int(rounded / 60)))
+            self.display.update_row(0, str(int(rounded * 100)))
+            time.sleep(1)
 
 
     def update_curr_time(self) -> None:
@@ -147,20 +158,37 @@ class DSKY:
         self.display.clear_all()
         self.indicators.clear_all()
 
+    def reset_screen(self) -> None:
+        self.display.update_noun("00")
+        self.display.update_verb("00")
+        self.display.update_prog("  ")
+        self.display.update_row(2, "00000")
+        self.display.update_row(1, "00000")
+        self.display.update_row(0, "000")
+
     def show_vectors(self) -> None:
         """
-        Shows velocity, altitude rate, altitude in R1, R2, R3 respectively: V06N62
+        Shows x, y, z velocity in R1, R2, R3 respectively: V06N62
         """
-        pass
-
-    def show_vectors_const(self) -> None:
-        """
-        Continuously shows velocity, altitude rate, altitude in R1, R2, R3 respectively: V16N62
-        """
-        pass
-
-
-
+        self.interrupted = False
+        vecs = []
+        with open('apollo11_launch.csv') as csvfile:
+            reader = csv.reader(csvfile)
+            first = True
+            for row in reader:
+                if first:
+                    first = False
+                    continue
+                vecs.append([round(float(x), 2) for x in row])
+        
+        i = 0
+        while (not self.interrupted):
+            self.display.update_row(2, ("   " + str(int(vecs[i][0] * 100)) if vecs[i][0] >= 0 else "-  " + str(abs(int(vecs[i][0] * 100)))))
+            self.display.update_row(1, ("   " + str(int(vecs[i][1] * 100)) if vecs[i][1] >= 0 else "-  " + str(abs(int(vecs[i][1] * 100)))))
+            self.display.update_row(0, ("   " + str(int(vecs[i][2] * 100)) if vecs[i][2] >= 0 else "-  " + str(abs(int(vecs[i][2] * 100)))))
+            time.sleep(3)
+            i = (i + 1) % len(vecs)
+        
 def double_str(num: int) -> str:
     if num < 10:
         return "0" + str(num)

@@ -13,7 +13,7 @@ class Display:
         #pygame.font.init()
         
         # Constants
-        self.screen_size = (240, 400)
+        self.screen_size = (240 * 2, 400 * 2)
         self.rect_height = self.screen_size[1]/5
         self.text_height = math.ceil((0.9)*self.rect_height)
         self.label_height = int(self.rect_height - self.text_height)
@@ -21,7 +21,7 @@ class Display:
         self.font_cor = pygame.font.SysFont('Gill Sans MT', self.label_height*3)
         
         # Initialize screen sections and values
-        self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]))
+        self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]), pygame.FULLSCREEN)
         self.rowList = []
         self.boxList = []
         self.labelList = []
@@ -106,6 +106,9 @@ class Display:
     def update_row(self, row: int, val: str) -> None:
         self.rowList[row][1] = self.font_dig.render(val, False, (0, 255, 1))
         self.screen.blit(self.rowList[row][1], self.rowList[row][0])
+        self.blit_all()
+        pygame.display.flip()
+        
 
     def update_verb(self, val: str) -> None:
         self.boxList[1][1] = self.font_dig.render(val, False, (0, 255, 1))
