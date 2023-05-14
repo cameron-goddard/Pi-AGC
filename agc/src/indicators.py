@@ -13,10 +13,9 @@ class Indicators:
         self.led_dict = {"TEMP": 12, "PROG": 1, "OPR ERR": 16, "KEY REL": 7, "TRACKER": 8, "STBY": 25}
         if "RPi.GPIO" in sys.modules:
             GPIO.setmode(GPIO.BCM)
-        
-            GPIO.setup(12, GPIO.OUT, initial = GPIO.LOW)
-            GPIO.setup(1, GPIO.OUT, initial = GPIO.LOW)
-            GPIO.setup(16, GPIO.OUT, initial = GPIO.LOW)   
+
+            for pin in self.led_dict.values():
+                GPIO.setup(pin, GPIO.OUT, initial = GPIO.LOW)
 
     def clear_all(self) -> None:
         if "RPi.GPIO" in sys.modules:
