@@ -9,7 +9,6 @@ def ece(dsky: DSKY, input: str) -> int:
     dsky.display.update_row(0, "5725")
     return 0
 
-
 def echo(dsky: DSKY, input: str) -> int:
     if input == None:
         return -2

@@ -79,7 +79,6 @@ class DSKY:
             # self.display.blit_all()
             # pygame.display.flip()
 
-
                 events = pygame.event.get()
                 for event in events:
                     # Handle key events (debugging)
@@ -90,19 +89,16 @@ class DSKY:
 
                             if ret == -1:
                                 self.display.clear_all(excluding=["prog"])
-                                self.indicators.indicator_on("OPR ERR")
-                                self.indicators.indicator_off("PROG")
-                                # Flash error indicator
+                                self.indicators.indicator_on(["OPR ERR"])
+                                self.indicators.indicator_off(["PROG"])
                             elif ret == -2:
-                                self.indicators.indicator_off("OPR ERR")
-                                self.indicators.indicator_off("PROG")
+                                self.indicators.indicator_off(["OPR ERR", "PROG"])
                             elif ret >= 0:
-                                self.indicators.indicator_off("OPR ERR")
-                                self.indicators.indicator_on("PROG")
+                                self.indicators.indicator_off(["OPR ERR"])
+                                self.indicators.indicator_on(["PROG"])
                                 self.load_prog(ret)
                             else:
-                                self.indicators.indicator_off("OPR ERR")
-                                self.indicators.indicator_off("PROG")
+                                self.indicators.indicator_off(["OPR ERR", "PROG"])
                                 if ret == -5:
                                     self.lamp_test()
                                 if ret == -6:
@@ -138,13 +134,12 @@ class DSKY:
         """
         if id >= len(self.progs):
             self.display.clear_all()
-            self.indicators.indicator_on("OPR ERR")
+            self.indicators.indicator_on(["OPR ERR"])
             return 1
         
         self.current_prog = id
         self.display.update_prog(double_str(id))
         self.display.clear_all(excluding=["prog"])
-        # TODO: flash comp acty
         
         prog = self.progs[id]
         prog(self, None)
@@ -171,33 +166,23 @@ class DSKY:
         self.display.update_row(2, "88888")
         self.display.update_prog("88")
 
-        self.indicators.indicator_on("TEMP")
-        self.indicators.indicator_on("TRACKER")
-        self.indicators.indicator_on("STBY")
-        self.indicators.indicator_on("PROG")
+        self.indicators.indicator_on(["TEMP", "TRACKER", "STBY", "PROG"])
 
         elapsed = 0.5
         while (not self.interrupted and elapsed < 4):
-            self.indicators.indicator_on("OPR ERR")
-            self.indicators.indicator_on("KEY REL")
+            self.indicators.indicator_on(["OPR ERR", "KEY REL"])
             self.display.update_verb("88")
             self.display.update_noun("88")
             time.sleep(0.5)
             elapsed += 0.5
 
-            self.indicators.indicator_off("OPR ERR")
-            self.indicators.indicator_off("KEY REL")
+            self.indicators.indicator_off(["OPR ERR", "KEY REL"])
             self.display.update_verb("")
             self.display.update_noun("")
             time.sleep(0.5)
             elapsed += 0.5
 
-        self.indicators.indicator_off("KEY REL")
-        self.indicators.indicator_off("TEMP")
-        self.indicators.indicator_off("TRACKER")
-        self.indicators.indicator_off("STBY")
-        self.indicators.indicator_off("OPR ERR")
-        self.indicators.indicator_off("PROG")
+        self.indicators.clear_all()
 
     def query_curr_time(self) -> None:
         """
