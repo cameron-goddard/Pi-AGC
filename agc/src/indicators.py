@@ -1,7 +1,8 @@
-
-import RPi.GPIO as GPIO
-import pygame
-import time
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    pass
+import sys
 
 class Indicators:
     """
@@ -10,24 +11,27 @@ class Indicators:
 
     def __init__(self) -> None:
         self.led_dict = {"TEMP": 12, "PROG": 1, "OPR ERR": 16}
+        if "RPi.GPIO" in sys.modules:
+            GPIO.setmode(GPIO.BCM)
         
-        GPIO.setmode(GPIO.BCM)
-        
-        GPIO.setup(12, GPIO.OUT, initial = GPIO.LOW)
-        GPIO.setup(1, GPIO.OUT, initial = GPIO.LOW)
-        GPIO.setup(16, GPIO.OUT, initial = GPIO.LOW)   
+            GPIO.setup(12, GPIO.OUT, initial = GPIO.LOW)
+            GPIO.setup(1, GPIO.OUT, initial = GPIO.LOW)
+            GPIO.setup(16, GPIO.OUT, initial = GPIO.LOW)   
 
     def clear_all(self) -> None:
-        for pin in self.led_dict.values():
-            GPIO.output(pin, GPIO.LOW)
+        if "RPi.GPIO" in sys.modules:
+            for pin in self.led_dict.values():
+                GPIO.output(pin, GPIO.LOW)
     
     def indicator_on(self, val: str) -> None:
         pin = self.led_dict[val]
-        GPIO.output(pin, GPIO.HIGH)
+        if "RPi.GPIO" in sys.modules:
+            GPIO.output(pin, GPIO.HIGH)
     
     def indicator_off(self, val: str) -> None:
         pin = self.led_dict[val]
-        GPIO.output(pin, GPIO.LOW)
+        if "RPi.GPIO" in sys.modules:
+            GPIO.output(pin, GPIO.LOW)
     
     """
     key - gpio

@@ -5,7 +5,7 @@ except ImportError:
 import time
 import pygame
 import csv
-import os
+import sys
 
 from cmd_parser import Parser
 from display import Display
@@ -28,28 +28,27 @@ class DSKY:
         self.current_prog = -1
         self.interrupted = False
 
+        self.running = True
+
     def init_progs(self, progs: list[Callable]) -> None:
         self.progs = progs
 
-    def verb_keyed(self, channel):
+    def verb_keyed(self, channel) -> None:
         self.parser.enter("v")
         self.interrupted = True
 
-    def noun_keyed(self, channel):
+    def noun_keyed(self, channel) -> None:
         self.parser.enter("n")
         self.interrupted = True
 
-    def prog_keyed(self, channel):
+    def prog_keyed(self, channel) -> None:
         self.current_prog = -1
 
     def start(self) -> None:
-        while True:
+        while self.running:
             # ret = None
             # key = "99"
 
-            
-            
-                
             # if self.current_prog == -1:
             #     if key != "99":
             #         ret = self.parser.enter(key)
@@ -85,6 +84,7 @@ class DSKY:
                 for event in events:
                     # Handle key events (debugging)
                     if event.type == pygame.KEYDOWN:
+                        print(self.current_prog)
                         if self.current_prog == -1:
                             ret = self.parser.enter(pygame.key.name(event.key))
 
@@ -123,6 +123,8 @@ class DSKY:
                                 
                 self.display.blit_all()
                 pygame.display.flip()
+        if "RPi.GPIO" in sys.modules:
+            GPIO.cleanup()
 
     def load_prog(self, id: int) -> int:
         """
@@ -136,7 +138,7 @@ class DSKY:
         """
         if id >= len(self.progs):
             self.display.clear_all()
-            # TODO: flash error indicator
+            self.indicators.indicator_on("OPR ERR")
             return 1
         
         self.current_prog = id
@@ -146,7 +148,6 @@ class DSKY:
         
         prog = self.progs[id]
         prog(self, None)
-        
 
     def _curr_time(self) -> float:
         """
@@ -155,7 +156,6 @@ class DSKY:
         Returns:
             float: The time, rounded to the nearest hundredth of a second
         """
-        print("curr time: ", round(time.time(), 2) - self._boot_time)
         return round(time.time(), 2) - self._boot_time
 
     # Defined below are default computer-specific behaviors (programs)
@@ -190,7 +190,6 @@ class DSKY:
         self.indicators.indicator_off("TEMP")
         self.indicators.indicator_off("OPR ERR")
         self.indicators.indicator_off("PROG")
-        
 
     def query_curr_time(self) -> None:
         """
@@ -214,6 +213,7 @@ class DSKY:
         """
         Updates the current time: V25N36E
         """
+        pass
         
     def show_alarm_codes(self) -> None:
         """
@@ -239,7 +239,7 @@ class DSKY:
         self.display.update_row(0, "000")
 
     def quit_prog(self) -> None:
-        os.exit()
+        self.running = False
 
     def show_vectors(self) -> None:
         """

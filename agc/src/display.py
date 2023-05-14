@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import math
+import sys
 
 class Display:
     """
@@ -8,9 +9,10 @@ class Display:
     """
 
     def __init__(self) -> None:
-        
-        # pygame.init()
-        #pygame.font.init()
+        pygame.init()
+        pygame.font.init()
+
+        pygame.mouse.set_visible(0)
         
         # Constants
         self.screen_size = (240 * 2, 400 * 2)
@@ -21,8 +23,10 @@ class Display:
         self.font_cor = pygame.font.SysFont('Gill Sans MT', self.label_height*3)
         
         # Initialize screen sections and values
-        self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]), pygame.FULLSCREEN)
-        #self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]))
+        if "RPi.GPIO" in sys.modules:
+            self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]), pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode((self.screen_size[0], self.screen_size[1]))
         self.rowList = []
         self.boxList = []
         self.labelList = []

@@ -7,3 +7,10 @@ commands = [
     ("v05n09", -9),
     ("v99", -10)
 ]
+
+def double_str(num: int) -> str:
+    if num < 0:
+        return "-" + str(num)
+    if num < 10:
+        return "0" + str(num)
+    return str(num)
