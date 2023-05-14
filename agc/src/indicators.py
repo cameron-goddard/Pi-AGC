@@ -10,7 +10,7 @@ class Indicators:
     """
 
     def __init__(self) -> None:
-        self.led_dict = {"TEMP": 12, "PROG": 1, "OPR ERR": 16}
+        self.led_dict = {"TEMP": 12, "PROG": 1, "OPR ERR": 16, "KEY REL": 7, "TRACKER": 8, "STBY": 25}
         if "RPi.GPIO" in sys.modules:
             GPIO.setmode(GPIO.BCM)
         

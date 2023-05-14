@@ -172,22 +172,30 @@ class DSKY:
         self.display.update_prog("88")
 
         self.indicators.indicator_on("TEMP")
-        self.indicators.indicator_on("OPR ERR")
+        self.indicators.indicator_on("TRACKER")
+        self.indicators.indicator_on("STBY")
         self.indicators.indicator_on("PROG")
 
         elapsed = 0.5
         while (not self.interrupted and elapsed < 4):
+            self.indicators.indicator_on("OPR ERR")
+            self.indicators.indicator_on("KEY REL")
             self.display.update_verb("88")
             self.display.update_noun("88")
             time.sleep(0.5)
             elapsed += 0.5
-           
+
+            self.indicators.indicator_off("OPR ERR")
+            self.indicators.indicator_off("KEY REL")
             self.display.update_verb("")
             self.display.update_noun("")
             time.sleep(0.5)
             elapsed += 0.5
 
+        self.indicators.indicator_off("KEY REL")
         self.indicators.indicator_off("TEMP")
+        self.indicators.indicator_off("TRACKER")
+        self.indicators.indicator_off("STBY")
         self.indicators.indicator_off("OPR ERR")
         self.indicators.indicator_off("PROG")
 
