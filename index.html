@@ -128,7 +128,39 @@ def echo(dsky: DSKY, input: str) -> int:
     if input.isdigit():
         dsky.display.update_noun(src.util.double_str(int(input)))
                             </code></pre>
-              <h4>Hardware</h4>
+              
+              
+                <p style="text-align: left;padding: 0px 30px;">
+                  To visualize the numeric displays on the original AGC, we created the display.py script which holds the class Display to create a GUI that would display all the input and output values on our HDMI display. This script relies primarily on the pygame library to achieve the original AGC-styled look. 
+                  <br>
+                  <br>
+                  In the initializer, display.py sets the screen along with various Rect objects that act as bounding boxes for the text. The screen is split into five different horizontal sections, each of the same height. The bottom three contain only one number, and the upper two contain two separate texts. To handle this, we further divided the upper two sections into three subsections. 
+                  <br>
+                  
+                  <div style="text-align:center;">
+                    <img class="img-rounded" src="pics/image0.jpeg" alt="Rect Section Sketch" width="400" height="600">
+                    <h5><i>Each box in this drawing depicts a section that is defined by a Rect object. These sections hold the displayed text.</i>
+                    </h5>
+                  </div>
+
+                  <br>
+                  <br>
+                  The initializer also sets the text in each of these sections to a default of zeros using the method render() on the font objects we initialized. These font objects hold the font ‘Digital 7’ for our input and output values and the font ‘Gill Sans MT’ for the labels that never change on the GUI. Finally, the initializer calls the function blit_all(), which calls the pygame method blit() on all the text attributes to overlay them onto all the Rect objects we created. 
+                  <br>
+                  <br>
+                  The Display class is also responsible for updating the values on the screen based on various inputs and outputs. To do this, it has the following methods:
+                  <ul>
+                    <li>update_row(self, row: int, val: str): takes a row index and value as parameters and updates the text of that row to be the specified value</li>
+                    <li>update_verb(self, val: str): updates the text in the verb Rect to be the passed in value</li>
+                    <li>update_noun(self, val: str): updates the text in the noun Rect to be the passed in value</li>
+                    <li>update_prog(self, val: str): updates the text in the prog Rect to be the passed in value</li>
+                    <li>clear_all(self, excluding: list[str] = []): sets the value of every text section to be an empty string</li>
+                  </ul>
+                </p>
+
+                
+              
+                            <h4>Hardware</h4>
               </div>
              
               <p style="text-align: left;padding: 0px 30px;">
@@ -149,6 +181,8 @@ def echo(dsky: DSKY, input: str) -> int:
                 </h5>
               </div>
 
+              <br>
+              <br>
               <p style="text-align: left;padding: 0px 30px;">
                 When we initially laser cut the frame, we added extra space around the display cutout because we wanted to create an evenly sized cutout for both the display and the indicator lights. However, this meant the HDMI display was not held in place, so we laser cut a second acrylic frame that fit the display perfectly and glued that to the back of the main frame.
                 <br>
