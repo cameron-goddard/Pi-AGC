@@ -144,25 +144,32 @@ def echo(dsky: DSKY, input: str) -> int:
 
               <div style="text-align:center;">
                 <img class="img-rounded" src="pics/image1.jpeg" alt="Laser Cut Sketch" width="400" height="600">
-                <h4>Our sketch detailing the dimensions of each component of our laser cut frame and keycaps. The grey areas
-                  represent the acrylic, while the white space is empty space that was cutout.
-                </h4>
+                <h5><i>Our sketch detailing the dimensions of each component of our laser cut frame and keycaps. The grey areas
+                  represent the acrylic, while the white space is empty space that was cutout.</i>
+                </h5>
               </div>
 
               <p style="text-align: left;padding: 0px 30px;">
                 When we initially laser cut the frame, we added extra space around the display cutout because we wanted to create an evenly sized cutout for both the display and the indicator lights. However, this meant the HDMI display was not held in place, so we laser cut a second acrylic frame that fit the display perfectly and glued that to the back of the main frame.
                 <br>
+                <br>
                 Setting up the indicator lights and the keypad buttons was a very similar process. We used protoboards to lay out all of the LEDs and buttons in the precise spacing we wanted.
+                <br>
                 <br>
                 The ten LEDs needed to be arranged into two columns that were spaced to fit into the space between a plastic crate that we used to separate the light emitted from each LED. We then placed a paper we printed with each indicator label over the plastic crate, which was glued to the protoboard, to mimic the indicator setup on the original AGC. This entire setup was glued behind the acrylic frame in the top left cutout.
                 <br>
+                <br>
                 The buttons were arranged in the same way as the keypad on the original AGC. We needed to account for the size of the keycaps when placing all the buttons on the protoboard, so we carefully measured out the necessary distances between each button. As stated earlier, we completed the appearance of these buttons by gluing acrylic squares onto the tops of each push button and glued a black paper square with the correct label onto the acrylic squares. This completed the look of our keypad.
+                <br>
                 <br>
                 The more difficult part of the LED and button setup was the wiring. Each LED and button required its own wire to connect to the GPIO pins on the Raspberry Pi. We were able to simplify the wiring by creating a common ground for all the LEDs and for all the buttons.
                 <br>
+                <br>
                 For the LEDs, we soldered a resistor to the negative terminal of each LED and then soldered a path that connected all the resistors to the wire going to ground. We then connected the positive terminals of the LEDs to a jumper wire that went to a GPIO pin on the Raspberry Pi. During this process, we learned that different LED colors can have different voltage drops, meaning they require different resistance values when they are using the same power draw. We found that the blue and green LEDs needed about 50 Ohm resistors, and the red and yellow LEDs needed about 130 Ohm resistors. Using the resistors we had, we found the closest resistors we could get to those numbers and soldered them to their respective LEDs. 
                 <br>
+                <br>
                 The buttons were more straightforward since they did not require any resistors. All we needed to do was solder one end of the push buttons to a jumper wire that connected to the GPIO pins on the Raspberry Pi and the other end to a path going to a common ground. One thing that we had to pay close attention to, however, was the orientation of the buttons. These push buttons have four prongs protruding from them. Using a multimeter, we found that these four prongs are paired in two sets of two prongs. The paired prongs are always connected to each other, but once the button is pressed, the two sets of prongs connect together, allowing current flow. This meant we had to be cautious while orienting the push buttons since we needed to ensure that we were soldering the GPIO connection to a different pair of prongs than the ground connection.
+                <br>
                 <br>
                 With the LED and button setup completely soldered onto the protoboards, all we had to do was glue the protoboards to their respective cutouts on the acrylic frame. Once that was complete, we had our hardware designed the way we planned. 
               </p>
