@@ -112,9 +112,24 @@
 
               </div>
 
-              <p style="text-align: left;padding: 0px 30px;">The main</p>
+              <p style="text-align: left;padding: 0px 30px;">The main DSKY class manages all components of the DSKY interface and input processing. It contains two other important classes, display and indicators, which act as abstractions to the hardware and Pygame calls to their respective components. The command parser is another major component of the DSKY, and is responsible for parsing a sequence of user input keys and returning a valid program ID or throwing an error. Third-party AGC programs are simply just Python functions that follow a specific format. They are loaded in from the progs directory. The program's function is called after every input to the DSKY. It must contain two arguments: A reference to the DSKY instance, and an input string. The DSKY interface provides all the needed APIs for the program to interface with it, and the input string is whatever the last key was pressed. The input string is None if and only if the program has just loaded, so an if check for it being None can act as an init section. A program can have 3 return values; 0 for completed, -1 for an error, or -2 (or None) for a program that is still running.</p>
+                <div class="row" align="left">
+                <pre><code>
+def echo(dsky: DSKY, input: str) -> int:
+    
+    # init code
+    if input == None:
+        return -2
 
+    # exit code
+    if input == "return":
+        return 0
+
+    if input.isdigit():
+        dsky.display.update_noun(src.util.double_str(int(input)))
+                            </code></pre>
               <h4>Hardware</h4>
+              </div>
              
               <p style="text-align: left;padding: 0px 30px;"></p>
       </div>
@@ -154,7 +169,7 @@
 
     <div style="text-align:center;">
             <h2>Conclusions</h2>
-            <p style="text-align: left;padding: 0px 30px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem nulla, consectetur at leo vel, pretium bibendum nisl. Cras blandit quam a enim ultrices, eu convallis enim posuere. Donec eleifend enim sed purus consectetur, vitae cursus lectus varius. Vivamus consectetur felis nec est venenatis posuere. Phasellus vitae aliquet erat. In laoreet lacinia mollis. Quisque iaculis nisl fermentum pharetra lobortis. Donec rhoncus dui sem, ac molestie leo tristique vel. Phasellus in nibh feugiat, fringilla lectus in, elementum magna. Etiam quis dui condimentum, tempus ex in, dapibus est. Cras ut congue augue. Donec ac enim ex. Ut id tristique risus, vel porttitor quam. Sed ultricies enim eu nibh porttitor, vel sodales enim feugiat. Fusce volutpat venenatis magna ac ultrices. Curabitur eget urna ut nulla mattis convallis non eu diam.</p>
+            <p style="text-align: left;padding: 0px 30px;">In the end</p>
     </div>
 
   <hr>
@@ -186,7 +201,7 @@
               <img class="img-rounded" src="pics/cam.jpg" alt="Generic placeholder image" width="240" height="240">
               <h3>Cameron Goddard</h3>
               <p class="lead">csg83@cornell.edu</p>
-              <p>[fill].
+              <p>Designed the software architecture.
           </div>
       </div>
 
@@ -213,12 +228,7 @@
 
       <div class="row">
               <h2>Code Appendix</h2>
-              <pre><code>
-// Hello World.c
-int main(){
-  printf("Hello World.\n");
-}
-              </code></pre>
+              <p>Code is available on <a href="https://github.com/cameron-goddard/pi-agc">GitHub</a></p>
       </div>
 
     </div><!-- /.container -->
