@@ -116,14 +116,40 @@
 
               <h4>Hardware</h4>
              
-              <p style="text-align: left;padding: 0px 30px;"></p>
-      </div>
+              <p style="text-align: left;padding: 0px 30px;">
+              For the hardware component of this project, we wanted three main things: a frame, LEDs, and buttons.
+              Each needed to be sized carefully with respect to each other to ensure we had the correct spacing and dimensions.
+              <br>
+              For the frame, we decided to use acrylic since it is easy to laser cut into the precise dimensions we want.
+              We created cutouts for the HDMI display, LEDs, and buttons using the CAD software SolidWorks. Additionally, we decided to
+              laser cut acrylic for the keycaps that go onto the buttons. We printed black squares with the text for each key and then glued
+              these onto the keycaps. The keycaps were then carefully glued to the actual push button switches.
+              </p>
 
-    <hr id='drawings'>
+              <div style="text-align:center;">
+                <img class="img-rounded" src="pics/image1.jpeg" alt="Laser Cut Sketch" width="400" height="600">
+                <h5>Our sketch detailing the dimensions of each component of our laser cut frame and keycaps. The grey areas
+                  represent the acrylic, while the white space is empty space that was cutout.
+                </h5>
+              </div>
 
-      <div style="text-align:center;">
-              <h2>Drawings</h2>
-              <p style="text-align: left;padding: 0px 30px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem nulla, consectetur at leo vel, pretium bibendum nisl. Cras blandit quam a enim ultrices, eu convallis enim posuere. Donec eleifend enim sed purus consectetur, vitae cursus lectus varius. Vivamus consectetur felis nec est venenatis posuere. Phasellus vitae aliquet erat. In laoreet lacinia mollis. Quisque iaculis nisl fermentum pharetra lobortis. Donec rhoncus dui sem, ac molestie leo tristique vel. Phasellus in nibh feugiat, fringilla lectus in, elementum magna. Etiam quis dui condimentum, tempus ex in, dapibus est. Cras ut congue augue. Donec ac enim ex. Ut id tristique risus, vel porttitor quam. Sed ultricies enim eu nibh porttitor, vel sodales enim feugiat. Fusce volutpat venenatis magna ac ultrices. Curabitur eget urna ut nulla mattis convallis non eu diam.</p>
+              <p style="text-align: left;padding: 0px 30px;">
+                When we initially laser cut the frame, we added extra space around the display cutout because we wanted to create an evenly sized cutout for both the display and the indicator lights. However, this meant the HDMI display was not held in place, so we laser cut a second acrylic frame that fit the display perfectly and glued that to the back of the main frame.
+                <br>
+                Setting up the indicator lights and the keypad buttons was a very similar process. We used protoboards to lay out all of the LEDs and buttons in the precise spacing we wanted.
+                <br>
+                The ten LEDs needed to be arranged into two columns that were spaced to fit into the space between a plastic crate that we used to separate the light emitted from each LED. We then placed a paper we printed with each indicator label over the plastic crate, which was glued to the protoboard, to mimic the indicator setup on the original AGC. This entire setup was glued behind the acrylic frame in the top left cutout.
+                <br>
+                The buttons were arranged in the same way as the keypad on the original AGC. We needed to account for the size of the keycaps when placing all the buttons on the protoboard, so we carefully measured out the necessary distances between each button. As stated earlier, we completed the appearance of these buttons by gluing acrylic squares onto the tops of each push button and glued a black paper square with the correct label onto the acrylic squares. This completed the look of our keypad.
+                <br>
+                The more difficult part of the LED and button setup was the wiring. Each LED and button required its own wire to connect to the GPIO pins on the Raspberry Pi. We were able to simplify the wiring by creating a common ground for all the LEDs and for all the buttons.
+                <br>
+                For the LEDs, we soldered a resistor to the negative terminal of each LED and then soldered a path that connected all the resistors to the wire going to ground. We then connected the positive terminals of the LEDs to a jumper wire that went to a GPIO pin on the Raspberry Pi. During this process, we learned that different LED colors can have different voltage drops, meaning they require different resistance values when they are using the same power draw. We found that the blue and green LEDs needed about 50 Ohm resistors, and the red and yellow LEDs needed about 130 Ohm resistors. Using the resistors we had, we found the closest resistors we could get to those numbers and soldered them to their respective LEDs. 
+                <br>
+                The buttons were more straightforward since they did not require any resistors. All we needed to do was solder one end of the push buttons to a jumper wire that connected to the GPIO pins on the Raspberry Pi and the other end to a path going to a common ground. One thing that we had to pay close attention to, however, was the orientation of the buttons. These push buttons have four prongs protruding from them. Using a multimeter, we found that these four prongs are paired in two sets of two prongs. The paired prongs are always connected to each other, but once the button is pressed, the two sets of prongs connect together, allowing current flow. This meant we had to be cautious while orienting the push buttons since we needed to ensure that we were soldering the GPIO connection to a different pair of prongs than the ground connection.
+                <br>
+                With the LED and button setup completely soldered onto the protoboards, all we had to do was glue the protoboards to their respective cutouts on the acrylic frame. Once that was complete, we had our hardware designed the way we planned. 
+              </p>
       </div>
 
     <hr id='testing'>
@@ -137,7 +163,7 @@
 
               <h4>Hardware</h4>
               <p style="text-align: left;padding: 0px 30px;">
-                We created a few useful unit tests in the tests directory over the course of the development of this project. For testing buttons, we initialized every GPIO button and printed out their GPIO number via callback functions. This script helped us catch when some buttons would fail or were wired incorrectly. We wrote a similar test for our LEDs.
+                We created a few useful unit tests in the tests directory over the course of the development of this project. For testing buttons, we initialized every GPIO button and printed out their GPIO number via callback functions. This script helped us catch when some buttons would fail or were wired incorrectly. We wrote a similar test for our LEDs to test that each LED was able to blink.
               </p>
       </div>
 
